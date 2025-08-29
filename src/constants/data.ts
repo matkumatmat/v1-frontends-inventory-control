@@ -22,28 +22,128 @@ export const navItems: NavItem[] = [
     items: [] // Empty array as there are no child items for Dashboard
   },
   {
+    title: 'Sales',
+    url: '/',
+    icon: 'product',
+    shortcut: ['p', 'p'],
+    isActive: false,
+    items: [
+      {
+        title: 'Sales Order',
+        url: '/inbound',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+      {
+        title: 'Packing Slip',
+        url: '/inbound',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+      {
+        title: 'Customer',
+        url: '/reports',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+    ] // No child items
+  },
+  {
     title: 'Product',
     url: '/dashboard/product',
     icon: 'product',
     shortcut: ['p', 'p'],
     isActive: false,
-    items: [] // No child items
+    items: [
+      {
+        title: 'Inbound',
+        url: '/inbound',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+      {
+        title: 'Outbound',
+        url: '/inbound',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+      {
+        title: 'Reports',
+        url: '/reports',
+        icon: 'userPen',
+        shortcut: ['m', 'm']        
+      },
+    ] // No child items
   },
   {
-    title: 'Account',
+    title: 'Shipment',
     url: '#', // Placeholder as there is no direct link for the parent
     icon: 'billing',
     isActive: true,
 
     items: [
       {
-        title: 'Profile',
+        title: 'Shipping Plan',
         url: '/dashboard/profile',
         icon: 'userPen',
         shortcut: ['m', 'm']
       },
       {
-        title: 'Login',
+        title: 'Shipment',
+        shortcut: ['l', 'l'],
+        url: '/',
+        icon: 'login'
+      },
+      {
+        title: 'Packing',
+        shortcut: ['l', 'l'],
+        url: '/',
+        icon: 'login'
+      },
+    ]
+  },
+  {
+    title: 'Document',
+    url: '#', // Placeholder as there is no direct link for the parent
+    icon: 'billing',
+    isActive: true,
+
+    items: [
+      {
+        title: 'Import',
+        url: '/dashboard/profile',
+        icon: 'userPen',
+        shortcut: ['m', 'm']
+      },
+      {
+        title: 'Export',
+        shortcut: ['l', 'l'],
+        url: '/',
+        icon: 'login'
+      },
+      {
+        title: 'Dashboard',
+        shortcut: ['l', 'l'],
+        url: '/dashboard/document',
+        icon: 'login'
+      }
+    ]
+  },
+  {
+    title: 'User',
+    url: '#', // Placeholder as there is no direct link for the parent
+    icon: 'billing',
+    isActive: true,
+
+    items: [
+      {
+        title: 'Employee Management',
+        url: '/dashboard/profile',
+        icon: 'userPen',
+        shortcut: ['m', 'm']
+      },
+      {
+        title: 'Overtime management',
         shortcut: ['l', 'l'],
         url: '/',
         icon: 'login'
