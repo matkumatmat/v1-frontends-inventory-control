@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { AddressManagement } from "./components/address-management";
 import { LogTable } from "./components/log-table";
@@ -11,7 +9,7 @@ import { Destination, PrintQueueItem, PrintPayloadItem } from "./types";
 import { Button } from "@/components/ui/button";
 import { KirimanModal } from "./components/kiriman-modal";
 import { PrintConfirmModal } from "./components/print-confirm-modal";
-import {PageContainer} from "./components/page-container";  //error
+import PageContainer from "@/components/layout/page-container";
 
 export default function LabelingPage() {
   const [printQueue, setPrintQueue] = useState<PrintQueueItem[]>([]);
@@ -124,7 +122,7 @@ export default function LabelingPage() {
   }
 
   return (
-    <PageContainer
+    <PageContainer>
       <div className="p-4 space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <div>
@@ -198,6 +196,6 @@ export default function LabelingPage() {
           </CardContent>
         </Card>
       </div>
-      />
+    </PageContainer>
   );
 }
