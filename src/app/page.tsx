@@ -1,9 +1,12 @@
-import React from 'react'
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
-function page() {
-  return (
-    <div className='w-full h-full'>home</div>
-  )
+export default async function Page() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return redirect('/auth/sign-in');
+  } else {
+    redirect('/dashboard/overview');
+  }
 }
-
-export default page
