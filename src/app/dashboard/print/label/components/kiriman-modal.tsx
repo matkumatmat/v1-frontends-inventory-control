@@ -49,7 +49,7 @@ export function KirimanModal({ isOpen, onClose, onSave, editingItem, allDestinat
         if (editingItem) {
             const dest = allDestinations.find(d => d.id === editingItem.id);
             setSelectedDestination(dest || null);
-            setSearchTerm(dest?.pt_tujuan || "");
+            setSearchTerm(dest?.pt_tujuan || editingItem.pt_tujuan);
             setTempGroups(editingItem.groups);
         } else {
             setSearchTerm("");
@@ -128,7 +128,7 @@ export function KirimanModal({ isOpen, onClose, onSave, editingItem, allDestinat
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{editingItem ? 'Edit Kiriman' : 'Buat Kiriman Baru'}</DialogTitle>
@@ -138,7 +138,7 @@ export function KirimanModal({ isOpen, onClose, onSave, editingItem, allDestinat
             {/* Step 1: Destination */}
             <div>
                 <Label>1. Cari & Pilih Alamat Tujuan</Label>
-                <div className="relative">
+                <div className="pt-4 relative">
                     <Input 
                         placeholder="Ketik untuk mencari..."
                         value={searchTerm}

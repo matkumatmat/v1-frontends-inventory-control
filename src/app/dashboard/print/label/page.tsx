@@ -17,15 +17,18 @@ export default function LabelingPage() {
   const [isKirimanModalOpen, setIsKirimanModalOpen] = useState(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const [editingQueueIndex, setEditingQueueIndex] = useState<number | null>(null);
+  const [isDataReady, setIsDataReady] = useState(false);
 
   useEffect(() => {
     const fetchAllDestinations = async () => {
       try {
-        const response = await fetch(`/api/destinations?all=true`);
+        const response = await fetch(`http://localhost:5000/api/destinations?all=true`);
         const data = await response.json();
         setAllDestinations(data.items);
       } catch (error) {
         console.error("Failed to fetch all destinations:", error);
+      } finally {
+        setIsDataReady(true);
       }
     };
     fetchAllDestinations();
@@ -83,7 +86,7 @@ export default function LabelingPage() {
     }
 
     try {
-      const response = await fetch(`/api/print-batch`, {
+      const response = await fetch(`http://localhost:5000/api/print-batch`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -123,7 +126,7 @@ export default function LabelingPage() {
 
   return (
     <PageContainer>
-      <div className="p-4 space-y-8">
+      <div className="w-full p-4 space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <div>
             <h1 className="text-3xl font-bold text-white">Antrian Cetak</h1>
@@ -132,7 +135,9 @@ export default function LabelingPage() {
             </p>
           </div>
           <div className="flex items-center space-x-4 mt-4 sm:mt-0">
-            <Button onClick={() => handleOpenKirimanModal(null)}>+ Buat Kiriman</Button>
+            <Button onClick={() => handleOpenKirimanModal(null)} disabled={!isDataReady}>
+              {!isDataReady ? "Memuat data..." : "+ Buat Kiriman"}
+            </Button>
             <Button variant="outline" onClick={() => setIsPrintModalOpen(true)}>Cetak Antrian</Button>
           </div>
         </div>
