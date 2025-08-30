@@ -1,9 +1,8 @@
-import { UserProfile } from '@clerk/nextjs';
-
 export default function ProfileViewPage() {
   return (
-    <div className='flex w-full flex-col p-4'>
-      <UserProfile />
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>Profile Page Disabled</h1>
+      <p>The profile page is not available because authentication has been disabled.</p>
     </div>
   );
 }

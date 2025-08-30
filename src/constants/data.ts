@@ -160,7 +160,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Label',
-    url: '/printing/label',
+    url: 'dashboard/print/label',
     icon: 'kanban',
     shortcut: ['k', 'k'],
     isActive: false,
