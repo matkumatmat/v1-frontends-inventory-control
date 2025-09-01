@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function DashboardPage() {
-  redirect('/dashboard/overview');
+export default function GuestPage() {
+  redirect('/guest/dashboard/overview');
 }

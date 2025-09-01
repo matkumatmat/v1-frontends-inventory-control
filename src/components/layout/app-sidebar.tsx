@@ -28,8 +28,8 @@ import {
   SidebarRail
 } from '@/components/ui/sidebar';
 import { UserAvatarProfile } from '@/components/user-avatar-profile';
-import { navItems } from '@/constants/data';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { NavItem } from '@/types';
 import {
   IconBell,
   IconChevronRight,
@@ -60,6 +60,8 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen } = useMediaQuery();
   const router = useRouter();
+  const [navItems, setNavItems] = React.useState<NavItem[]>([]);
+
   const handleSwitchTenant = (_tenantId: string) => {
     // Tenant switching functionality would be implemented here
   };
@@ -69,6 +71,33 @@ export default function AppSidebar() {
   React.useEffect(() => {
     // Side effects based on sidebar state changes
   }, [isOpen]);
+
+  React.useEffect(() => {
+    const loadNavItems = async () => {
+      let role = 'guest'; // default to guest
+      if (pathname.includes('/admin')) {
+        role = 'admin';
+      } else if (pathname.includes('/developer')) {
+        role = 'developer';
+      }
+
+      let items;
+      switch (role) {
+        case 'admin':
+          items = (await import('@/constants/admin-nav')).navItems;
+          break;
+        case 'developer':
+          items = (await import('@/constants/developer-nav')).navItems;
+          break;
+        default:
+          items = (await import('@/constants/guest-nav')).navItems;
+          break;
+      }
+      setNavItems(items);
+    };
+
+    loadNavItems();
+  }, [pathname]);
 
   return (
     <Sidebar collapsible='icon'>
