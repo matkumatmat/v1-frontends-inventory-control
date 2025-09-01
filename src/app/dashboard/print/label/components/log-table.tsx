@@ -58,7 +58,8 @@ export function LogTable() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>ID Log</TableHead>
+                            <TableHead>
+                                 Log</TableHead>
                             <TableHead>Tujuan</TableHead>
                             <TableHead>Detail Cetak</TableHead>
                             <TableHead>Waktu Cetak</TableHead>
