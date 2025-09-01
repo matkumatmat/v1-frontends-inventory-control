@@ -120,7 +120,7 @@ export function AddressManagement() {
                 />
                 <Button onClick={() => handleOpenModal(null)}>+ Tambah Alamat Baru</Button>
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border scroll-auto">
                 <Table>
                     <TableHeader>
                         <TableRow>
