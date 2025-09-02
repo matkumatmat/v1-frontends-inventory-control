@@ -6,12 +6,9 @@ import { z } from "zod";
 
 import PageContainer from '@/components/layout/page-container';
 import { Button } from "@/components/ui/button";
-// Benar
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Link from "next/link";
 
-// Pro Tip 1: Definisikan skema data dengan Zod
-// Ini memastikan data yang Anda terima (misalnya dari API) memiliki struktur yang benar.
 const salesDataSchema = z.object({
   month: z.string(),
   revenue: z.number().positive(),
@@ -28,11 +25,9 @@ const dashboardDataSchema = z.object({
     salesByCategory: z.array(categorySchema),
 });
 
-// Pro Tip 2: Gunakan z.infer untuk membuat tipe TypeScript dari skema Zod
 type SalesData = z.infer<typeof salesDataSchema>;
 type DashboardData = z.infer<typeof dashboardDataSchema>;
 
-// Mock data (simulasi data dari API)
 const MOCK_DATA = {
     salesOverTime: [
         { month: 'Jan', revenue: 4000, unitsSold: 240 },
@@ -52,28 +47,16 @@ const MOCK_DATA = {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-//================================================================//
-//                            KOMPONEN UTAMA                      //
-//================================================================//
-
 const SalesDashboardPage = () => {
-    // Pro Tip 3: Kelola state untuk loading, data, and error
     const [data, setData] = useState<DashboardData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Simulasi fetching data dari API
         const fetchData = async () => {
             try {
-                // di dunia nyata, Anda akan fetch dari API:
-                // const response = await fetch('/api/sales-data');
-                // const rawData = await response.json();
-
-                // Validasi data dengan Zod
                 const validatedData = dashboardDataSchema.parse(MOCK_DATA);
                 setData(validatedData);
-
             } catch (err) {
                  if (err instanceof z.ZodError) {
                     setError("Data validation failed: " + err.errors.map(e => e.message).join(', '));
@@ -85,8 +68,6 @@ const SalesDashboardPage = () => {
                 setIsLoading(false);
             }
         };
-
-        // Tambahkan sedikit delay untuk simulasi network latency
         setTimeout(fetchData, 1000);
     }, []);
 
@@ -98,7 +79,6 @@ const SalesDashboardPage = () => {
         return <PageContainer><div className='flex items-center justify-center h-full text-red-500'>Error: {error || "Data could not be loaded."}</div></PageContainer>;
     }
 
-    // Pro Tip 4: Gunakan komponen Card dari Shadcn untuk konsistensi UI
     return (
         <PageContainer>
             <div className='flex flex-col gap-6 p-4'>
@@ -112,7 +92,6 @@ const SalesDashboardPage = () => {
                     </Button>
                 </div>
 
-                {/* Pro Tip 5: Gunakan CSS Grid untuk layout yang responsif */}
                 <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
                     <ChartCard title="Revenue Over Time" description="Monthly revenue trend">
                         <RevenueChart data={data.salesOverTime} />
@@ -129,15 +108,10 @@ const SalesDashboardPage = () => {
     );
 };
 
-//================================================================//
-//                      KOMPONEN PENDUKUNG                          //
-//================================================================//
-
-// Pro Tip 6: Buat komponen wrapper untuk Chart agar reusable
 interface ChartCardProps {
     title: string;
     description: string;
-    children: React.ReactNode;
+    children: React.ReactElement;
 }
 
 const ChartCard: React.FC<ChartCardProps> = ({ title, description, children }) => (
@@ -147,7 +121,6 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, description, children }) =
             <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
-            {/* Pro Tip 7: Gunakan ResponsiveContainer agar chart menyesuaikan ukuran Card */}
             <div className='w-full h-[300px]'>
                 <ResponsiveContainer width="100%" height="100%">
                     {children}
@@ -157,10 +130,8 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, description, children }) =
     </Card>
 );
 
-
-// Contoh Chart 1: Line Chart
-const RevenueChart = ({ data }: { data: SalesData[] }) => (
-    <LineChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+const RevenueChart = ({ data, width, height }: { data: SalesData[], width?: number, height?: number }) => (
+    <LineChart width={width} height={height} data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
@@ -170,9 +141,8 @@ const RevenueChart = ({ data }: { data: SalesData[] }) => (
     </LineChart>
 );
 
-// Contoh Chart 2: Pie Chart
-const CategoryPieChart = ({ data }: { data: {name: string, value: number}[] }) => (
-     <PieChart>
+const CategoryPieChart = ({ data, width, height }: { data: {name: string, value: number}[], width?: number, height?: number }) => (
+     <PieChart width={width} height={height}>
         <Pie
           data={data}
           cx="50%"
@@ -191,9 +161,8 @@ const CategoryPieChart = ({ data }: { data: {name: string, value: number}[] }) =
      </PieChart>
 );
 
-// Contoh Chart 3: Bar Chart
-const UnitsSoldChart = ({ data }: { data: SalesData[] }) => (
-    <BarChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+const UnitsSoldChart = ({ data, width, height }: { data: SalesData[], width?: number, height?: number }) => (
+    <BarChart width={width} height={height} data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
@@ -202,6 +171,5 @@ const UnitsSoldChart = ({ data }: { data: SalesData[] }) => (
         <Bar dataKey="unitsSold" fill="#82ca9d" />
     </BarChart>
 );
-
 
 export default SalesDashboardPage;
