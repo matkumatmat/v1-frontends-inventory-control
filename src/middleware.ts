@@ -3,18 +3,23 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
   const role = request.cookies.get('user-role')?.value || 'guest';
   const { pathname } = request.nextUrl;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  const getRedirectUrl = () => {
+    return isDevelopment ? '/dev/sign-in' : '/auth/sign-in';
+  };
 
   // Rule for admin routes
   if (pathname.startsWith('/admin')) {
     if (role !== 'admin') {
-      return NextResponse.redirect(new URL('/auth/sign-in', request.url));
+      return NextResponse.redirect(new URL(getRedirectUrl(), request.url));
     }
   }
 
   // Rule for developer routes
   if (pathname.startsWith('/developer')) {
     if (role !== 'admin' && role !== 'developer') {
-      return NextResponse.redirect(new URL('/auth/sign-in', request.url));
+      return NextResponse.redirect(new URL(getRedirectUrl(), request.url));
     }
   }
 

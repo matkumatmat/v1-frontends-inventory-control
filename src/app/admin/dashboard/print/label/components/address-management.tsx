@@ -32,7 +32,7 @@ export function AddressManagement() {
     const fetchAddresses = async (page: number, search: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/destinations?page=${page}&search=${search}`);
+            const response = await fetch(`http://10.234.79.216:5000/api/destinations?page=${page}&search=${search}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch addresses');
             }
@@ -73,8 +73,8 @@ export function AddressManagement() {
 
     const handleSaveAddress = async (data: Destination) => {
         const url = data.id
-            ? `http://localhost:5000/api/destinations/${data.id}`
-            : `http://localhost:5000/api/destinations`;
+            ? `http://10.234.79.216:5000/api/destinations/${data.id}`
+            : `http://10.234.79.216:5000/api/destinations`;
         const method = data.id ? 'PUT' : 'POST';
 
         // A bit of data wrangling to match the backend expectations from the form data

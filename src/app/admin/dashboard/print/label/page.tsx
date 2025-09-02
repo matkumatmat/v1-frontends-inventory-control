@@ -22,7 +22,7 @@ export default function LabelingPage() {
   useEffect(() => {
     const fetchAllDestinations = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/destinations?all=true`);
+        const response = await fetch(`http://10.234.79.216:5000/api/destinations?all=true`);
         const data = await response.json();
         setAllDestinations(data.items);
       } catch (error) {
@@ -86,7 +86,7 @@ export default function LabelingPage() {
     }
 
     try {
-      const response = await fetch(`http:localhost:8000/api/print-batch`, {
+      const response = await fetch(`http://10.234.79.216:5000/api/print-batch`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -4,7 +4,7 @@ import { NavItem } from '@/types';
 export const navItems: NavItem[] = [
   {
     title: 'Dashboard',
-    url: '/dashboard/overview',
+    url: '/admin/dashboard/overview',
     icon: 'dashboard',
     isActive: false,
     shortcut: ['d', 'd'],
@@ -12,55 +12,55 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Sales',
-    url: '/',
+    url: '/admin',
     icon: 'product',
     shortcut: ['p', 'p'],
     isActive: false,
     items: [
       {
         title: 'Sales Order',
-        url: '/inbound',
+        url: '/admin/inbound',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
       {
         title: 'Packing Slip',
-        url: '/inbound',
+        url: '/admin/inbound',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
       {
         title: 'Customer',
-        url: '/reports',
+        url: '/admin/reports',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
     ] // No child items
   },
   {
     title: 'Product',
-    url: '/dashboard/product',
+    url: '/admin/dashboard/product',
     icon: 'product',
     shortcut: ['p', 'p'],
     isActive: false,
     items: [
       {
         title: 'Inbound',
-        url: '/inbound',
+        url: '/admin/inbound',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
       {
         title: 'Outbound',
-        url: '/inbound',
+        url: '/admin/inbound',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
       {
         title: 'Reports',
-        url: '/reports',
+        url: '/admin/reports',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['m', 'm']        
       },
     ] // No child items
   },
@@ -73,20 +73,20 @@ export const navItems: NavItem[] = [
     items: [
       {
         title: 'Shipping Plan',
-        url: '/dashboard/profile',
+        url: '/admin/dashboard/profile',
         icon: 'userPen',
         shortcut: ['m', 'm']
       },
       {
         title: 'Shipment',
         shortcut: ['l', 'l'],
-        url: '/',
+        url: '/admin',
         icon: 'login'
       },
       {
         title: 'Packing',
         shortcut: ['l', 'l'],
-        url: '/',
+        url: '/admin',
         icon: 'login'
       },
     ]
@@ -100,20 +100,20 @@ export const navItems: NavItem[] = [
     items: [
       {
         title: 'Import',
-        url: '/dashboard/profile',
+        url: '/admin/dashboard/profile',
         icon: 'userPen',
         shortcut: ['m', 'm']
       },
       {
         title: 'Export',
         shortcut: ['l', 'l'],
-        url: '/',
+        url: '/admin',
         icon: 'login'
       },
       {
         title: 'Dashboard',
         shortcut: ['l', 'l'],
-        url: '/dashboard/document',
+        url: '/admin/dashboard/document',
         icon: 'login'
       }
     ]
@@ -127,21 +127,21 @@ export const navItems: NavItem[] = [
     items: [
       {
         title: 'Employee Management',
-        url: '/dashboard/profile',
+        url: '/admin/dashboard/profile',
         icon: 'userPen',
         shortcut: ['m', 'm']
       },
       {
         title: 'Overtime management',
         shortcut: ['l', 'l'],
-        url: '/',
+        url: '/admin',
         icon: 'login'
       }
     ]
   },
   {
     title: 'Kanban',
-    url: '/dashboard/kanban',
+    url: '/admin/dashboard/kanban',
     icon: 'kanban',
     shortcut: ['k', 'k'],
     isActive: false,
@@ -149,7 +149,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Label',
-    url: 'dashboard/print/label',
+    url: '/admin/dashboard/print/label',
     icon: 'kanban',
     shortcut: ['k', 'k'],
     isActive: false,
