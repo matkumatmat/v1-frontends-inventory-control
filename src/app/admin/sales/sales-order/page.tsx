@@ -67,15 +67,39 @@ import {
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
 
 const salesOrderFormSchema = z.object({
+    so: z.string().min(1, "SO number is required."),
     po: z.string().min(1, "PO number is required."),
     poDate: z.date({ required_error: "PO date is required." }),
-    customer: z.string().min(1, "Customer name is required."),
-    product: z.string().min(1, "Product name is required."),
+    customer: z.string({ required_error: "Please select a customer." }),
+    product: z.string({ required_error: "Please select a product." }),
     quantity: z.coerce.number().min(1, "Quantity must be at least 1."),
     value: z.coerce.number().min(1, "Value must be at least 1."),
 })
+
+const customerData = [
+    { id: "CUST-001", name: "John Doe" },
+    { id: "CUST-002", name: "Jane Smith" },
+    { id: "CUST-003", name: "Sam Wilson" },
+    { id: "CUST-004", name: "Sara Johnson" },
+    { id: "CUST-005", name: "Michael Brown" },
+]
+
+const productData = [
+    { id: "PROD-001", name: "Laptop Model X" },
+    { id: "PROD-002", name: "Desktop Model Y" },
+    { id: "PROD-003", name: "Tablet Model Z" },
+    { id: "PROD-004", name: "Accessories Kit" },
+]
 
 const salesOrderData = [
     { SO: "SO-001", PO: "PO-101", poDate: "2024-06-01", customer: "John Doe", product: "Laptop Model X", quantity: 10, value: 10000, quantityRealisation: 10, valueRealisation: 10000, status: "Fulfilled" },
@@ -192,6 +216,7 @@ const SalesOrderTable = () => {
     const form = useForm<z.infer<typeof salesOrderFormSchema>>({
         resolver: zodResolver(salesOrderFormSchema),
         defaultValues: {
+            so: "",
             po: "",
             customer: "",
             product: "",
@@ -237,6 +262,19 @@ const SalesOrderTable = () => {
                                 </DialogHeader>
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                        <FormField
+                                            control={form.control}
+                                            name="so"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>SO Number</FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="SO-001" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
                                         <FormField
                                             control={form.control}
                                             name="po"
@@ -294,9 +332,18 @@ const SalesOrderTable = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>Customer</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="John Doe" {...field} />
-                                                    </FormControl>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select a customer" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            {customerData.map(customer => (
+                                                                <SelectItem key={customer.id} value={customer.name}>{customer.name}</SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -307,9 +354,18 @@ const SalesOrderTable = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>Product</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="Laptop Model X" {...field} />
-                                                    </FormControl>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select a product" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            {productData.map(product => (
+                                                                <SelectItem key={product.id} value={product.name}>{product.name}</SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
