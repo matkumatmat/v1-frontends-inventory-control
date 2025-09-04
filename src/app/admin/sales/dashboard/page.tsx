@@ -20,6 +20,47 @@ import {
 import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis, Area, AreaChart, Pie, PieChart, Cell } from 'recharts';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { MoreHorizontal, Calendar as CalendarIcon } from "lucide-react"
+import Link from "next/link"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import {
+    ColumnDef,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+    SortingState,
+    ColumnFiltersState,
+    VisibilityState,
+} from "@tanstack/react-table"
+import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
+import { DataTableViewOptions } from "@/components/ui/table/data-table-view-options";
+import { DataTablePagination } from "@/components/ui/table/data-table-pagination";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { addDays, format } from "date-fns"
+import { DateRange } from "react-day-picker"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
 
 // Mock Data
 const summaryData = [
@@ -167,53 +208,14 @@ const ModernPieChart = () => {
     )
 };
 
-// Sales Order Table Implementation
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MoreHorizontal } from "lucide-react"
-import Link from "next/link"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-    SortingState,
-    ColumnFiltersState,
-    VisibilityState,
-} from "@tanstack/react-table"
-import { DataTable } from "@/components/ui/table/data-table";
-import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
-import { DataTableViewOptions } from "@/components/ui/table/data-table-view-options";
-import { DataTablePagination } from "@/components/ui/table/data-table-pagination";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-
 const salesOrderData = [
-    { id: "SO-001", customer: "John Doe", date: "2024-06-01", status: "Fulfilled", total: 250.00 },
-    { id: "SO-002", customer: "Jane Smith", date: "2024-06-02", status: "Pending", total: 150.50 },
-    { id: "SO-003", customer: "Sam Wilson", date: "2024-06-03", status: "Fulfilled", total: 350.00 },
-    { id: "SO-004", customer: "Sara Johnson", date: "2024-06-04", status: "Cancelled", total: 50.00 },
-    { id: "SO-005", customer: "Michael Brown", date: "2024-06-05", status: "Fulfilled", total: 450.75 },
-    { id: "SO-006", customer: "Emily Davis", date: "2024-06-06", status: "Pending", total: 50.25 },
-    { id: "SO-007", customer: "Chris Miller", date: "2024-06-07", status: "Fulfilled", total: 100.00 },
+    { SO: "SO-001", PO: "PO-101", poDate: "2024-06-01", customer: "John Doe", product: "Laptop Model X", quantity: 10, value: 10000, quantityRealisation: 10, valueRealisation: 10000, status: "Fulfilled" },
+    { SO: "SO-002", PO: "PO-102", poDate: "2024-06-02", customer: "Jane Smith", product: "Desktop Model Y", quantity: 5, value: 7500, quantityRealisation: 0, valueRealisation: 0, status: "Pending" },
+    { SO: "SO-003", PO: "PO-103", poDate: "2024-06-03", customer: "Sam Wilson", product: "Tablet Model Z", quantity: 20, value: 8000, quantityRealisation: 10, valueRealisation: 4000, status: "Partial" },
+    { SO: "SO-004", PO: "PO-104", poDate: "2024-06-04", customer: "Sara Johnson", product: "Laptop Model X", quantity: 5, value: 5000, quantityRealisation: 0, valueRealisation: 0, status: "Cancelled" },
+    { SO: "SO-005", PO: "PO-105", poDate: "2024-06-05", customer: "Michael Brown", product: "Accessories Kit", quantity: 50, value: 2500, quantityRealisation: 50, valueRealisation: 2500, status: "Fulfilled" },
+    { SO: "SO-006", PO: "PO-106", poDate: "2024-06-06", customer: "Emily Davis", product: "Desktop Model Y", quantity: 2, value: 3000, quantityRealisation: 0, valueRealisation: 0, status: "Pending" },
+    { SO: "SO-007", PO: "PO-107", poDate: "2024-06-07", customer: "Chris Miller", product: "Laptop Model X", quantity: 8, value: 8000, quantityRealisation: 8, valueRealisation: 8000, status: "Fulfilled" },
 ];
 
 type SalesOrder = typeof salesOrderData[0];
@@ -238,18 +240,15 @@ const salesOrderColumns: ColumnDef<SalesOrder>[] = [
         enableSorting: false,
         enableHiding: false,
     },
-    {
-        accessorKey: "id",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Order ID" />
-    },
-    {
-        accessorKey: "customer",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Customer" />
-    },
-    {
-        accessorKey: "date",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />
-    },
+    { accessorKey: "SO", header: ({ column }) => <DataTableColumnHeader column={column} title="SO" /> },
+    { accessorKey: "PO", header: ({ column }) => <DataTableColumnHeader column={column} title="PO" /> },
+    { accessorKey: "poDate", header: ({ column }) => <DataTableColumnHeader column={column} title="PO Date" /> },
+    { accessorKey: "customer", header: ({ column }) => <DataTableColumnHeader column={column} title="Customer" /> },
+    { accessorKey: "product", header: ({ column }) => <DataTableColumnHeader column={column} title="Product" /> },
+    { accessorKey: "quantity", header: ({ column }) => <DataTableColumnHeader column={column} title="Quantity" /> },
+    { accessorKey: "value", header: ({ column }) => <DataTableColumnHeader column={column} title="Value" /> },
+    { accessorKey: "quantityRealisation", header: ({ column }) => <DataTableColumnHeader column={column} title="Qty Realisation" /> },
+    { accessorKey: "valueRealisation", header: ({ column }) => <DataTableColumnHeader column={column} title="Value Realisation" /> },
     {
         accessorKey: "status",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
@@ -258,21 +257,10 @@ const salesOrderColumns: ColumnDef<SalesOrder>[] = [
             const statusColor =
                 status === "Fulfilled" ? "bg-green-500" :
                 status === "Pending" ? "bg-yellow-500" :
+                status === "Partial" ? "bg-blue-500" :
                 "bg-red-500";
             return <Badge className={statusColor}>{status}</Badge>
         }
-    },
-    {
-        accessorKey: "total",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Total" />,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("total"))
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount)
-            return <div className="text-right font-medium">{formatted}</div>
-        },
     },
     {
         id: "actions",
@@ -288,12 +276,11 @@ const salesOrderColumns: ColumnDef<SalesOrder>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(order.id)}>
-                            Copy Order ID
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(order.SO)}>
+                            Copy SO Number
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View order details</DropdownMenuItem>
+                        <DropdownMenuItem>View Details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -344,7 +331,10 @@ const SalesOrderTable = () => {
                         className="max-w-sm"
                     />
                     <DataTableViewOptions table={table} />
-                    <Button variant="outline" className="ml-auto">Export</Button>
+                    <div className="ml-auto flex gap-2">
+                        <Button variant="outline">Import</Button>
+                        <Button variant="outline">Export</Button>
+                    </div>
                 </div>
                 <div className="rounded-md border">
                     <Table>
@@ -388,6 +378,54 @@ const SalesOrderTable = () => {
     )
 }
 
+function DateRangePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
+    const [date, setDate] = React.useState<DateRange | undefined>({
+        from: new Date(2024, 0, 20),
+        to: addDays(new Date(2024, 0, 20), 20),
+    })
+
+    return (
+        <div className={cn("grid gap-2", className)}>
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button
+                        id="date"
+                        variant={"outline"}
+                        className={cn(
+                            "w-[300px] justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                    >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date?.from ? (
+                            date.to ? (
+                                <>
+                                    {format(date.from, "LLL dd, y")} -{" "}
+                                    {format(date.to, "LLL dd, y")}
+                                </>
+                            ) : (
+                                format(date.from, "LLL dd, y")
+                            )
+                        ) : (
+                            <span>Pick a date</span>
+                        )}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                    />
+                </PopoverContent>
+            </Popover>
+        </div>
+    )
+}
+
 
 export default function SalesDashboardPage() {
   return (
@@ -397,6 +435,7 @@ export default function SalesDashboardPage() {
           <h2 className='text-2xl font-bold tracking-tight'>
             Sales Dashboard
           </h2>
+          <DateRangePicker />
         </div>
 
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
